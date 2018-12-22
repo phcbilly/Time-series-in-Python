@@ -1,0 +1,38 @@
+#Q1 Q2 Q3
+
+import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+import statsmodels.api as sm
+
+bit=pd.read_csv("Kraken.csv")
+sp=pd.read_csv("SP500.csv")
+goldam=pd.read_csv("GOLDAM.csv")
+dcoil=pd.read_csv("DCOIL.csv")
+dex=pd.read_csv("DEXUSEU.csv")
+
+bit.head()
+sp.head()
+goldam.head()
+dcoil.head()
+dex.head()
+
+data=pd.merge(bit,sp[["DATE","SP500"]],on="DATE",how="left")
+data.tail()
+
+data1=pd.merge(data,goldam[["DATE","GOLDAM"]],on="DATE",how="left")
+data1.tail()
+
+data2=pd.merge(data1,dcoil[["DATE","DCOILWTICO"]],on="DATE",how="left")
+data2.tail()
+
+data3=pd.merge(data2,dex[["DATE","DEXUSEU"]],on="DATE",how="outer")
+data3.head()
+type(data3)
+
+#because it is time series data, I choose to fill na according to yesterday data instead of mean or median 
+data3.fillna(method='ffill', axis=0,inplace=True)
+data3.tail()
+
+#time series data
+
